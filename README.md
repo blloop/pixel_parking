@@ -1,2 +1,2 @@
-# pixel_parking
+# Pixel Parking
 Parking game made with Godot Engine
