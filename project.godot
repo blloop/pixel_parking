@@ -15,6 +15,10 @@ run/main_scene="res://Main.tscn"
 boot_splash/use_filter=false
 config/icon="res://icon.png"
 
+[autoload]
+
+Player="*res://Player.tscn"
+
 [display]
 
 window/size/width=800

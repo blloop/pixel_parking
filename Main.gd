@@ -8,10 +8,15 @@ extends Node
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	$Player.position.x = $SpawnPosition.position.x
+	$Player.position.y = $SpawnPosition.position.y
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	$Label1._change_text($Player.velocity)
-	$Label2._change_text($Player.turn_speed)
+func _process(_delta):
+	$Label1.text = "Velocity:" + str($Player.velocity)
+	$Label2.text = "Turn Speed:" + str($Player.turn_speed)
+	
+	$Label3.text = "Parked:" + str($ParkingGoal.touch_center and not $ParkingGoal.touch_border)
+	
+	#if ($ParkingGoal.touch_center and not $ParkingGoal.touch_border):

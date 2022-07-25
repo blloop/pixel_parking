@@ -7,7 +7,7 @@ signal bump
 var vector = Vector2()
 var screen_size
 
-var max_velocity = 200
+var max_velocity = 150
 var velocity = 0
 var acceleration = 4 # Range 1 - 5
 var friction = 7 # Range 5 - 10
@@ -40,16 +40,22 @@ func _process(_delta):
 		if Input.is_action_pressed("turn_right"):
 			turn_speed += turn_acceleration
 	
+	if Input.is_action_just_pressed("ui_select"):
+		if (Player.visible):
+			hide()
+		else:
+			show()
+		yield(get_tree().create_timer(1), "timeout")
+	
 	if (velocity > max_velocity):
 		velocity = max_velocity
 	if (velocity < -1 * max_velocity):
 		velocity = -1 * max_velocity
 	for n in friction:
-		if (not Input.is_action_pressed("accelerate") and not Input.is_action_pressed("reverse")):
-			if (velocity > 0):
-				velocity -= 1
-			if (velocity < 0):
-				velocity += 1
+		if (velocity > 0 and not Input.is_action_pressed("accelerate")):
+			velocity -= 1
+		if (velocity < 0and not Input.is_action_pressed("reverse")):
+			velocity += 1
 	
 	if (turn_speed > max_turn_speed):
 		turn_speed = max_turn_speed
@@ -62,6 +68,21 @@ func _process(_delta):
 			if (turn_speed < 0):
 				turn_speed += 1
 	
+	if (turn_speed < -30):
+		$Wheels.rotation = -0.2
+	elif (turn_speed < -15):
+		$Wheels.rotation = -0.15
+	elif (turn_speed < -2):
+		$Wheels.rotation = -0.1
+	elif (turn_speed < 2):
+		$Wheels.rotation = 0
+	elif (turn_speed < 15):
+		$Wheels.rotation = 0.1
+	elif (turn_speed < 30):
+		$Wheels.rotation = 0.15
+	else:
+		$Wheels.rotation = 0.2
+	
 	rotation += (turn_speed * velocity) / 200000.0
 	vector = Vector2(velocity, 0).rotated(rotation)
 	vector = move_and_slide(vector)
@@ -70,11 +91,10 @@ func _process(_delta):
 func start(_pos):
 	# position = pos
 	show()
-	$CollisionPolygon2D.disabled = false
-
+	$CollisionPolygon2D.disabled = false\
 
 func _on_Player_body_entered(_body):
 	# hide()
-	emit_signal("hit")
+	emit_signal("bump")
 	# Must be deferred as we can't change physics properties on a physics callback.
 	$CollisionPolygon2D.set_deferred("disabled", true)
