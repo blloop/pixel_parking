@@ -1,4 +1,5 @@
 extends Node
+signal start
 
 
 # Declare member variables here. Examples:
@@ -7,16 +8,28 @@ extends Node
 
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
-	$Player.position.x = $SpawnPosition.position.x
-	$Player.position.y = $SpawnPosition.position.y
+func _ready():	
+	pass
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
-	$Label1.text = "Velocity:" + str($Player.velocity)
-	$Label2.text = "Turn Speed:" + str($Player.turn_speed)
+	if ($ParkingGoal.touch_center and not $ParkingGoal.touch_border):
+		$Parked.show()
+	else:
+		$Parked.hide()
+
+func _reset_player():
+	$Player.position.x = $SpawnPosition.position.x
+	$Player.position.y = $SpawnPosition.position.y
+	$Player.rotation = $SpawnPosition.rotation	
+	$Player.velocity = 0
+	$Player.turn_speed = 0
 	
-	$Label3.text = "Parked:" + str($ParkingGoal.touch_center and not $ParkingGoal.touch_border)
-	
-	#if ($ParkingGoal.touch_center and not $ParkingGoal.touch_border):
+
+func _bump():
+	_reset_player()
+
+
+func _on_HUD_start():
+	_reset_player()

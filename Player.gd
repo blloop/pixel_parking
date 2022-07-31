@@ -3,25 +3,22 @@ signal bump
 
 
 # Declare member variables here. Examples:
-
 var vector = Vector2()
 var screen_size
 
-var max_velocity = 150
+var max_velocity = 50
 var velocity = 0
-var acceleration = 4 # Range 1 - 5
-var friction = 7 # Range 5 - 10
+var acceleration = 3
 
-var max_turn_speed = 36
+var max_turn_speed = 60
 var turn_speed = 0
-var turn_acceleration = 2 # Range 1 - 3
-var turn_friction = 2 # Range 1 - 3
+var turn_acceleration = 2
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	screen_size = get_viewport_rect().size
-	# hide()
+	show()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -51,22 +48,29 @@ func _process(_delta):
 		velocity = max_velocity
 	if (velocity < -1 * max_velocity):
 		velocity = -1 * max_velocity
-	for n in friction:
-		if (velocity > 0 and not Input.is_action_pressed("accelerate")):
-			velocity -= 1
-		if (velocity < 0and not Input.is_action_pressed("reverse")):
-			velocity += 1
+	if (velocity > 0 and not Input.is_action_pressed("accelerate")):
+		velocity -= 1
+	if (velocity < 0 and not Input.is_action_pressed("reverse")):
+		velocity += 1
+	if (velocity > 0 and not Input.is_action_pressed("accelerate")):
+		velocity -= 1
+	if (velocity < 0 and not Input.is_action_pressed("reverse")):
+		velocity += 1
 	
 	if (turn_speed > max_turn_speed):
 		turn_speed = max_turn_speed
 	if (turn_speed < -1 * max_turn_speed):
 		turn_speed = -1 * max_turn_speed	
-	for n in turn_friction:
-		if (not Input.is_action_pressed("turn_left") and not Input.is_action_pressed("turn_right")):
-			if (turn_speed > 0):
-				turn_speed -= 1
-			if (turn_speed < 0):
-				turn_speed += 1
+	if (not Input.is_action_pressed("turn_left") and not Input.is_action_pressed("turn_right")):
+		if (turn_speed > 0):
+			turn_speed -= 1
+		if (turn_speed < 0):
+			turn_speed += 1
+	if (not Input.is_action_pressed("turn_left") and not Input.is_action_pressed("turn_right")):
+		if (turn_speed > 0):
+			turn_speed -= 1
+		if (turn_speed < 0):
+			turn_speed += 1
 	
 	if (turn_speed < -30):
 		$Wheels.rotation = -0.2
@@ -83,18 +87,16 @@ func _process(_delta):
 	else:
 		$Wheels.rotation = 0.2
 	
-	rotation += (turn_speed * velocity) / 200000.0
-	vector = Vector2(velocity, 0).rotated(rotation)
-	vector = move_and_slide(vector)
+	if (velocity < 0):
+		rotation -= (turn_speed * pow(velocity, 2)) / 3500000.0
+	else:
+		rotation += (turn_speed * pow(velocity, 2)) / 3500000.0
+	vector = Vector2(velocity / 15, 0).rotated(rotation)
+	vector = move_and_collide(vector)
+	if vector:
+		emit_signal("bump")
 
-
-func start(_pos):
-	# position = pos
-	show()
-	$CollisionPolygon2D.disabled = false\
-
-func _on_Player_body_entered(_body):
+#func _on_Player_body_entered(_body):
 	# hide()
-	emit_signal("bump")
 	# Must be deferred as we can't change physics properties on a physics callback.
-	$CollisionPolygon2D.set_deferred("disabled", true)
+	#$CollisionPolygon2D.set_deferred("disabled", true)
