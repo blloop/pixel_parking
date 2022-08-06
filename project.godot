@@ -21,7 +21,12 @@ Player="*res://Player.tscn"
 
 [display]
 
-window/size/width=800
+window/size/width=810
+
+[global]
+
+size=false
+resolution=false
 
 [input]
 

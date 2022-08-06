@@ -1,5 +1,5 @@
 extends Node
-signal start
+# signal start
 
 
 # Declare member variables here. Examples:
@@ -15,9 +15,9 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	if ($ParkingGoal.touch_center and not $ParkingGoal.touch_border):
-		$Parked.show()
+		$ParkingGoal/AnimatedSprite.animation = "finished";
 	else:
-		$Parked.hide()
+		$ParkingGoal/AnimatedSprite.play("waiting");
 
 func _reset_player():
 	$Player.position.x = $SpawnPosition.position.x

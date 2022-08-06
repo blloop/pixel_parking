@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/wall_corner.png-c596c2d575533a4e193dc723990327dc.stex"
+path="res://.import/goal_wait_3.png-fb4e1c7d6b5262105df09201239f7060.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/wall_corner.png"
-dest_files=[ "res://.import/wall_corner.png-c596c2d575533a4e193dc723990327dc.stex" ]
+source_file="res://assets/goal_wait_3.png"
+dest_files=[ "res://.import/goal_wait_3.png-fb4e1c7d6b5262105df09201239f7060.stex" ]
 
 [params]
 

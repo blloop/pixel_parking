@@ -2,8 +2,6 @@ extends Area2D
 
 
 # Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
 var touch_border = false
 var touch_center = false
 

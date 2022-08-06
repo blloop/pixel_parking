@@ -8,7 +8,7 @@ var screen_size
 
 var max_velocity = 50
 var velocity = 0
-var acceleration = 3
+var acceleration = 2
 
 var max_turn_speed = 60
 var turn_speed = 0
@@ -61,16 +61,12 @@ func _process(_delta):
 		turn_speed = max_turn_speed
 	if (turn_speed < -1 * max_turn_speed):
 		turn_speed = -1 * max_turn_speed	
-	if (not Input.is_action_pressed("turn_left") and not Input.is_action_pressed("turn_right")):
-		if (turn_speed > 0):
-			turn_speed -= 1
-		if (turn_speed < 0):
-			turn_speed += 1
-	if (not Input.is_action_pressed("turn_left") and not Input.is_action_pressed("turn_right")):
-		if (turn_speed > 0):
-			turn_speed -= 1
-		if (turn_speed < 0):
-			turn_speed += 1
+	for n in 3:
+		if (not Input.is_action_pressed("turn_left") and not Input.is_action_pressed("turn_right")):
+			if (turn_speed > 0):
+				turn_speed -= 1
+			if (turn_speed < 0):
+				turn_speed += 1
 	
 	if (turn_speed < -30):
 		$Wheels.rotation = -0.2
@@ -86,6 +82,9 @@ func _process(_delta):
 		$Wheels.rotation = 0.15
 	else:
 		$Wheels.rotation = 0.2
+	
+	if (abs(velocity) < 3 and turn_speed > 8):
+		turn_speed = 8;
 	
 	if (velocity < 0):
 		rotation -= (turn_speed * pow(velocity, 2)) / 3500000.0
